@@ -5,7 +5,9 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 
 import co.edu.uniquindio.poo.Controller.ReservaController;
-import co.edu.uniquindio.poo.model.*;
+import co.edu.uniquindio.poo.model.Empresa;
+import co.edu.uniquindio.poo.model.Reserva;
+import co.edu.uniquindio.poo.model.Vehiculo;
 import co.edu.uniquindio.poo.viewController.ReservaViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +37,7 @@ public class App extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             // Asegúrate de que la ruta coincide con la ubicación real del archivo FXML
-            loader.setLocation(App.class.getResource("/co/edu/uniquindio/poo/viewController/CrudReserva.fxml"));
+            loader.setLocation(App.class.getResource("/co/edu/uniquindio/poo/CrudReserva.fxml"));
             AnchorPane rootLayout = (AnchorPane) loader.load();
             
             // Obtén el controlador y establece las dependencias
