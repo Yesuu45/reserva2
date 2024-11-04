@@ -8,4 +8,5 @@ module co.edu.uniquindio.poo {
     exports co.edu.uniquindio.poo;
     exports co.edu.uniquindio.poo.viewController;
     opens co.edu.uniquindio.poo.viewController to javafx.fxml;
+    opens co.edu.uniquindio.poo.model;
 }

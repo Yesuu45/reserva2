@@ -42,7 +42,13 @@ public abstract class Vehiculo {
     } 
 
     public abstract double calcularCosto(Reserva reserva);
-}
+    @Override
+    public String toString() {
+        return   matricula + " " + modelo + " " + marca + " "
+                + añoFabricacion ;
+    }
 
     
+}
+
 
