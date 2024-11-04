@@ -1,18 +1,21 @@
 package co.edu.uniquindio.poo.viewController;
 
-/**
- * Sample Skeleton for 'CrudReserva.fxml' Controller Class
- */
-
- /**
- * Sample Skeleton for 'CrudReserva.fxml' Controller Class
- */
-
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.poo.App;
 import co.edu.uniquindio.poo.Controller.ReservaController;
+import co.edu.uniquindio.poo.model.Auto;
+import co.edu.uniquindio.poo.model.Caja;
+import co.edu.uniquindio.poo.model.Camion;
+import co.edu.uniquindio.poo.model.Cliente;
+import co.edu.uniquindio.poo.model.Moto;
+import co.edu.uniquindio.poo.model.Reserva;
+import co.edu.uniquindio.poo.model.Vehiculo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,83 +23,160 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class ReservaViewController {
-    App app;
-    ReservaController reservaController;
-
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
-    @FXML // fx:id="cbClientes"
-    private ComboBox<?> cbClientes; // Value injected by FXMLLoader
-
-    @FXML // fx:id="columClientes"
-    private TableColumn<?, ?> columClientes; // Value injected by FXMLLoader
-
-    @FXML // fx:id="columVehiculos"
-    private TableColumn<?, ?> columVehiculos; // Value injected by FXMLLoader
-
-    @FXML // fx:id="columInicioReserva"
-    private TableColumn<?, ?> columInicioReserva; // Value injected by FXMLLoader
-
-    @FXML // fx:id="btnFechaInicial"
-    private DatePicker btnFechaInicial; // Value injected by FXMLLoader
-
-    @FXML // fx:id="tblListaReservas"
-    private TableView<?> tblListaReservas; // Value injected by FXMLLoader
-
-    @FXML // fx:id="columFinReserva"
-    private TableColumn<?, ?> columFinReserva; // Value injected by FXMLLoader
-
-    @FXML // fx:id="btnAgregarReserva"
-    private Button btnAgregarReserva; // Value injected by FXMLLoader
-
-    @FXML // fx:id="btnFechaFinal"
-    private DatePicker btnFechaFinal; // Value injected by FXMLLoader
-
-    @FXML // fx:id="btnEliminarReserva"
-    private Button btnEliminarReserva; // Value injected by FXMLLoader
-
-    @FXML // fx:id="cbVehiculos"
-    private ComboBox<?> cbVehiculos; // Value injected by FXMLLoader
+    private App app;
+    private ReservaController reservaController;
 
     @FXML
-    void agregarReservaAction(ActionEvent event) {
+    private ResourceBundle resources;
 
+    @FXML
+    private URL location;
+
+    @FXML
+    private ComboBox<Cliente> cbClientes; // Value injected by FXMLLoader
+
+    @FXML
+    private TableColumn<Reserva, Cliente> columClientes; // Value injected by FXMLLoader
+
+    @FXML
+    private TableColumn<Reserva, Vehiculo> columVehiculos; // Value injected by FXMLLoader
+
+    @FXML
+    private TableColumn<Reserva, LocalDate> columInicioReserva; // Value injected by FXMLLoader
+
+    @FXML
+    private DatePicker btnFechaInicial; // Value injected by FXMLLoader
+
+    @FXML
+    private TableView<Reserva> tblListaReservas; // Value injected by FXMLLoader
+    
+    @FXML
+    private TableColumn<Reserva, LocalDate> columFinReserva;
+
+    private ObservableList<Cliente> listaClientes;
+    private ObservableList<Vehiculo> listaVehiculos;
+    private ObservableList<Reserva> listaReservas;
+
+    @FXML
+    private Button btnAgregarReserva; // Value injected by FXMLLoader
+
+    @FXML
+    private DatePicker btnFechaFinal; // Value injected by FXMLLoader
+
+    @FXML
+    private Button btnEliminarReserva; // Value injected by FXMLLoader
+
+    @FXML
+    private ComboBox<Vehiculo> cbVehiculos; // Value injected by FXMLLoader
+
+@FXML
+void agregarReservaAction(ActionEvent event) {
+    Cliente cliente = cbClientes.getValue();
+    Vehiculo vehiculo = cbVehiculos.getValue();
+    LocalDate fechaInicio = btnFechaInicial.getValue();
+    LocalDate fechaFin = btnFechaFinal.getValue();
+
+    if (cliente != null && vehiculo != null && fechaInicio != null && fechaFin != null) {
+        // Calcular los días de la reserva
+        int dias = (int) (fechaFin.toEpochDay() - fechaInicio.toEpochDay());
+
+        // Generar un ID único (esto es solo un ejemplo, puedes ajustarlo según tus necesidades)
+        String id = "RES-" + System.currentTimeMillis();
+
+        // Crear listas vacías de clientes y vehículos si no tienes valores iniciales
+        LinkedList<Vehiculo> vehiculos = new LinkedList<>();
+        LinkedList<Cliente> clientes = new LinkedList<>();
+
+        // Usar las tarifas predeterminadas
+        double tarifaBase = 15000.0;
+        double tarifaAdicional = 20000.0;
+
+        // Crear la reserva con todos los parámetros del constructor
+        Reserva reserva = new Reserva(fechaInicio, fechaFin, id, dias, vehiculos, cliente, vehiculo, clientes, tarifaBase, tarifaAdicional);
+
+        reservaController.agregarReserva(reserva);
+        listaReservas.add(reserva);
+        tblListaReservas.refresh();
+    } else {
+        // Mostrar una alerta o mensaje de error en lugar de imprimirlo
+        System.out.println("Todos los campos son obligatorios.");
     }
+}
+
 
     @FXML
     void eliminarReservaAction(ActionEvent event) {
-
+        Reserva reservaSeleccionada = tblListaReservas.getSelectionModel().getSelectedItem();
+        if(reservaSeleccionada != null){
+            reservaController.getListaReservas().remove(reservaSeleccionada);
+            listaReservas.remove(reservaSeleccionada);
+            tblListaReservas.refresh();
+        } else {
+            // Mostrar una alerta al usuario indicando que debe seleccionar una reserva
+            System.out.println("Seleccione una reserva para eliminar.");
+        }
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML
     void initialize() {
-        assert cbClientes != null : "fx:id=\"cbClientes\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert columClientes != null : "fx:id=\"columClientes\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert columVehiculos != null : "fx:id=\"columVehiculos\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert columInicioReserva != null : "fx:id=\"columInicioReserva\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert btnFechaInicial != null : "fx:id=\"btnFechaInicial\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert tblListaReservas != null : "fx:id=\"tblListaReservas\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert columFinReserva != null : "fx:id=\"columFinReserva\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert btnAgregarReserva != null : "fx:id=\"btnAgregarReserva\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert btnFechaFinal != null : "fx:id=\"btnFechaFinal\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert btnEliminarReserva != null : "fx:id=\"btnEliminarReserva\" was not injected: check your FXML file 'CrudReserva.fxml'.";
-        assert cbVehiculos != null : "fx:id=\"cbVehiculos\" was not injected: check your FXML file 'CrudReserva.fxml'.";
+        assert cbClientes != null : "fx:id=\"cbClientes\" fue inyectado incorrectamente.";
+        assert columClientes != null : "fx:id=\"columClientes\" fue inyectado incorrectamente.";
+        assert columVehiculos != null : "fx:id=\"columVehiculos\" fue inyectado incorrectamente.";
+        assert columInicioReserva != null : "fx:id=\"columInicioReserva\" fue inyectado incorrectamente.";
+        assert btnFechaInicial != null : "fx:id=\"btnFechaInicial\" fue inyectado incorrectamente.";
+        assert tblListaReservas != null : "fx:id=\"tblListaReservas\" fue inyectado incorrectamente.";
+        assert columFinReserva != null : "fx:id=\"columFinReserva\" fue inyectado incorrectamente.";
+        assert btnAgregarReserva != null : "fx:id=\"btnAgregarReserva\" fue inyectado incorrectamente.";
+        assert btnFechaFinal != null : "fx:id=\"btnFechaFinal\" fue inyectado incorrectamente.";
+        assert btnEliminarReserva != null : "fx:id=\"btnEliminarReserva\" fue inyectado incorrectamente.";
+        assert cbVehiculos != null : "fx:id=\"cbVehiculos\" fue inyectado incorrectamente.";
 
+        cargarDatos();
+
+        // Configuración de ComboBox
+        cbClientes.setItems(listaClientes);
+        cbVehiculos.setItems(listaVehiculos);
+
+        // Configuración de TableView
+        columClientes.setCellValueFactory(new PropertyValueFactory<>("cliente"));
+        columVehiculos.setCellValueFactory(new PropertyValueFactory<>("vehiculo"));
+        columInicioReserva.setCellValueFactory(new PropertyValueFactory<>("fechaInicio"));
+        columFinReserva.setCellValueFactory(new PropertyValueFactory<>("fechaFin"));
+
+        tblListaReservas.setItems(listaReservas);
     }
+
+    private void cargarDatos() {
+        // Crear clientes
+        listaClientes = FXCollections.observableArrayList(
+            new Cliente("Carlos", "Pérez", "carlos.perez@example.com", "ID001"),
+            new Cliente("Ana", "García", "ana.garcia@example.com", "ID002"),
+            new Cliente("Luis", "Martínez", "luis.martinez@example.com", "ID003"),
+            new Cliente("Marta", "Rodríguez", "marta.rodriguez@example.com", "ID004"),
+            new Cliente("Juan", "López", "juan.lopez@example.com", "ID005")
+        );
+
+        // Crear vehículos
+        listaVehiculos = FXCollections.observableArrayList(
+            new Moto("ABC123", "ModeloX", "MarcaA", LocalDate.of(2020, 1, 10), Caja.AUTOMATICA),
+            new Moto("DEF456", "ModeloY", "MarcaB", LocalDate.of(2019, 5, 20), Caja.MANUAL),
+            new Camion("GHI789", "ModeloZ", "MarcaC", LocalDate.of(2018, 3, 15), 5.5),
+            new Auto("JKL012", "ModeloW", "MarcaD", LocalDate.of(2021, 7, 8), 4),
+            new Camion("MNO345", "ModeloV", "MarcaE", LocalDate.of(2017, 11, 30), 7.0)
+        );
+
+        // Crear lista de reservas (vacía al inicio)
+        listaReservas = FXCollections.observableArrayList();
+    }
+
     public void setApp(App app) {
         this.app = app;
-
     }
 
-    
     public void setReservaController(ReservaController reservaController) {
         this.reservaController = reservaController;
     }
-
 }

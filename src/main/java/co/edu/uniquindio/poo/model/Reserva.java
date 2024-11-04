@@ -9,17 +9,21 @@ public class Reserva {
     private String id;
     private int dias;
     private LinkedList<Vehiculo>vehiculos;
+    private Cliente cliente ;
+    private Vehiculo vehiculo;
     private LinkedList<Cliente>clientes ;
     private double tarifaBase = 15.0000;
     private  double tarifaAdicional =20.000;
-
     public Reserva(LocalDate fechaInicio, LocalDate fechaFin, String id, int dias, LinkedList<Vehiculo> vehiculos,
-            LinkedList<Cliente> clientes, double tarifaBase, double tarifaAdicional) {
+            Cliente cliente, Vehiculo vehiculo, LinkedList<Cliente> clientes, double tarifaBase,
+            double tarifaAdicional) {
         FechaInicio = fechaInicio;
         FechaFin = fechaFin;
         this.id = id;
         this.dias = dias;
         this.vehiculos = vehiculos;
+        this.cliente = cliente;
+        this.vehiculo = vehiculo;
         this.clientes = clientes;
         this.tarifaBase = tarifaBase;
         this.tarifaAdicional = tarifaAdicional;
@@ -54,6 +58,18 @@ public class Reserva {
     public void setVehiculos(LinkedList<Vehiculo> vehiculos) {
         this.vehiculos = vehiculos;
     }
+    public Cliente getCliente() {
+        return cliente;
+    }
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
     public LinkedList<Cliente> getClientes() {
         return clientes;
     }
@@ -73,8 +89,6 @@ public class Reserva {
         this.tarifaAdicional = tarifaAdicional;
     }
 
-
     
-
 
 }

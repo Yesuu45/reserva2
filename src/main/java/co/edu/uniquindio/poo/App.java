@@ -18,10 +18,11 @@ import javafx.collections.ObservableList;
 public class App extends Application {
 
     private Stage primaryStage;
-    private ReservaController reservaController; // Declarar como ClienteController
+    private ReservaController reservaController; // Declarar como ReservaController
     private LinkedList<Reserva> listaReservas = new LinkedList<>(); // Inicializa lista de reservas
     private Empresa empresa = new Empresa("UNIQUINDIO", listaReservas);
     // Observable lists to populate ComboBoxes in the UI
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
@@ -33,8 +34,11 @@ public class App extends Application {
     private void openViewPrincipal() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/co/edu/uniquindio/poo/ReservaView.fxml"));
-            javafx.scene.layout.AnchorPane rootLayout = (javafx.scene.layout.AnchorPane) loader.load();
+            // Asegúrate de que la ruta coincide con la ubicación real del archivo FXML
+            loader.setLocation(App.class.getResource("/co/edu/uniquindio/poo/viewController/CrudReserva.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            
+            // Obtén el controlador y establece las dependencias
             ReservaViewController primaryController = loader.getController();
             primaryController.setReservaController(reservaController); // Pasar el controlador a la vista
             primaryController.setApp(this);
@@ -45,7 +49,6 @@ public class App extends Application {
         } catch (IOException e) {
             e.printStackTrace(); // Considera mostrar una alerta al usuario
         }
-    
     }
 
     public static void main(String[] args) {
@@ -54,11 +57,10 @@ public class App extends Application {
 
     public void inicializarData() {
         reservaController = new ReservaController(empresa); // Inicializa el controlador aquí
-        inicializarReservas(); // Agrega los clientes
+        inicializarReservas(); // Agrega las reservas si es necesario
     }
 
     public void inicializarReservas(){
-        
+        // Aquí puedes agregar reservas iniciales si lo deseas
     }
-
 }
