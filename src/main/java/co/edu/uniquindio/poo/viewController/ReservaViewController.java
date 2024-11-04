@@ -11,6 +11,8 @@ package co.edu.uniquindio.poo.viewController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import co.edu.uniquindio.poo.App;
+import co.edu.uniquindio.poo.Controller.ReservaController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +22,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class ReservaViewController {
+    App app;
+    ReservaController reservaController;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -85,4 +89,14 @@ public class ReservaViewController {
         assert cbVehiculos != null : "fx:id=\"cbVehiculos\" was not injected: check your FXML file 'CrudReserva.fxml'.";
 
     }
+    public void setApp(App app) {
+        this.app = app;
+
+    }
+
+    
+    public void setReservaController(ReservaController reservaController) {
+        this.reservaController = reservaController;
+    }
+
 }
